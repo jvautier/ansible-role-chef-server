@@ -1,0 +1,4 @@
+oc_id['applications'] ||= {}
+oc_id['applications']['supermarket'] = {
+  'redirect_uri' => '{{ chef_server.supermarket_url }}/auth/chef_oauth2/callback'
+}

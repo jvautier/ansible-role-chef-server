@@ -1,0 +1,32 @@
+---
+- name: Include ansible_distribution and ansible_os_family tasks
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+- name: configure - chef-server-ctl reconfigure
+  become: true
+  become_user: root
+  shell: "chef-server-ctl reconfigure"
+- name: configure - chef-server-ctl user-create
+  become: true
+  become_user: root
+  # yamllint disable-line rule:line-length
+  shell: "chef-server-ctl user-create {{ chef_server_administrator_name }} {{ chef_server_administrator_first_name }} {{ chef_server_administrator_last_name }} {{ chef_server_administrator_email }} '{{ chef_server_administrator_name }}' --filename {{ chef_server_administrator_rsa_file_path }}"
+- name: configure - chef-server-ctl org-create
+  become: true
+  become_user: root
+  # yamllint disable-line rule:line-length
+  shell: "chef-server-ctl org-create {{ chef_server_org_name }} '{{ chef_server_org_fullname }}' --association_user {{ chef_server_administrator_name }} --filename {{ chef_server_org_pem_file_path }}"
+- name: configure - chef-server-ctl install chef-manage
+  become: true
+  become_user: root
+  shell: "chef-server-ctl install chef-manage"
+- name: configure - chef-manage-ctl reconfigure
+  become: true
+  become_user: root
+  shell: "chef-manage-ctl reconfigure --accept-license"
+- name: configure - chef-server-ctl reconfigure
+  become: true
+  become_user: root
+  shell: "chef-server-ctl reconfigure"
