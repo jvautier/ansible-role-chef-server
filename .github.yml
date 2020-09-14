@@ -1,0 +1,9 @@
+---
+# See https://github.com/jvautier/project-cli
+fullname: jvautier/ansible-role-chef-server
+description: Install chef-server through ansible
+tags:
+  - ansible
+  - ansible-role
+  - chef-server
+github: {}
